@@ -63,7 +63,33 @@ class LLStr {
    **/
 
   pop(): string {
-    return "x";
+
+    if (this.head === null){
+      throw new IndexError("no item in the list")
+    }
+
+    let val = ""
+
+    if (this.length === 1){
+      val = this.head.val
+      this.head = null
+      this.tail = null
+      this.length = 0
+    }
+
+    let current: NodeStr | null = this.head
+
+    while (current !== null){
+      if (current.next === this.tail && this.tail !== null){
+        this.length -= 1
+        val = this.tail.val
+        this.tail = current
+        current.next = null
+      }
+      current = current.next
+    }
+
+    return val
   }
 
   /** shift(): return & remove first item.
@@ -72,7 +98,20 @@ class LLStr {
    **/
 
   shift(): string {
-    return "x";
+
+    if (this.head === null){
+      throw new IndexError("Array is empty")
+    }
+
+    let val = this.head.val
+    this.length -= 1
+    this.head = this.head.next
+
+    if (this.length === 0){
+      this.tail = null
+    }
+
+    return val;
   }
 
   /** getAt(idx): get val at idx.

@@ -239,11 +239,14 @@ class LLStr {
       this.head = null
       this.tail = null
       this.length = 0
+      return node!.val
     }
 
     if (idx === 0){
       node = this.head
       this.head = this.head!.next
+      this.length --
+      return node!.val
     }
 
     let currentIdx = 0
@@ -256,13 +259,17 @@ class LLStr {
       currentIdx++
     }
 
-    previousNode.next = currentNode
-
-    if (idx === this.length-1){
-      node = this.tail
+    if (currentNode === this.tail){
+      this.tail = previousNode
+      previousNode!.next = null
+    } else {
+      previousNode!.next = currentNode!.next
     }
 
-    return node.val;
+    node = currentNode
+    this.length --
+
+    return node!.val;
   }
 
   /** toArray (useful for tests!) */

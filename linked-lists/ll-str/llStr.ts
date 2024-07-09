@@ -120,7 +120,21 @@ class LLStr {
    **/
 
   getAt(idx: number): string {
-    return "x";
+
+    if (this.head === null || idx >= this.length || idx < 0){
+      throw new IndexError()
+    }
+
+    let currentIdx = 0
+    let currentNode = this.head
+
+    while (idx > currentIdx){
+      if (currentNode.next !==null){
+        currentNode = currentNode.next
+      }
+      currentIdx++
+    }
+    return currentNode.val;
   }
 
   /** setAt(idx, val): set val at idx to val.
@@ -129,6 +143,25 @@ class LLStr {
    **/
 
   setAt(idx: number, val: string): void {
+
+    if (this.head === null || idx < 0 || idx >= this.length){
+      throw new IndexError()
+    }
+
+    let currentIdx = 0
+    let currentNode = this.head
+    let previousNode = null
+
+    while (currentIdx < idx){
+      if (currentNode.next !== null){
+        previousNode = currentNode
+        currentNode = currentNode.next
+      }
+      currentIdx++
+    }
+
+    currentNode.val = val
+
   }
 
   /** insertAt(idx, val): add node w/val before idx.
@@ -137,6 +170,47 @@ class LLStr {
    **/
 
   insertAt(idx: number, val: string): void {
+
+    if (idx < 0 || idx > this.length){
+      throw new IndexError()
+    }
+
+    let newNode = new NodeStr(val)
+
+    if (this.head === null){
+      this.head = newNode
+      this.tail = newNode
+      this.length = 1
+      return
+    }
+
+    if (this.length === 1){
+      this.head = newNode
+      this.length = 2
+    }
+
+      let currentIdx = 0
+      let currentNode = this.head
+      let previousNode = null
+
+      while (currentIdx < idx){
+        previousNode = currentNode
+        if (currentNode.next !== null){
+          currentNode = currentNode.next
+        }
+        currentIdx++
+      }
+
+      if (previousNode === null){
+        this.head = newNode
+      } else if (previousNode === currentNode){
+        this.tail = newNode
+      } else {
+        previousNode.next = newNode
+      }
+
+      newNode.next = currentNode
+      this.length ++
   }
 
   /** removeAt(idx): return & remove item at idx,
@@ -145,7 +219,50 @@ class LLStr {
    **/
 
   removeAt(idx: number): string {
-    return "x";
+
+    // idx not valid
+    // only one element
+    // regular cases
+    // start at the head, continue operation until we reach idx
+    // take the element return it
+    // previous element's next needs to link to the one after
+    // if removing at beginning (update the head) vs. at the end (update the tail)
+
+    if (idx < 0 || idx >= this.length){
+      throw new IndexError()
+    }
+
+    let node = null
+
+    if (this.length === 1){
+      node = this.head
+      this.head = null
+      this.tail = null
+      this.length = 0
+    }
+
+    if (idx === 0){
+      node = this.head
+      this.head = this.head!.next
+    }
+
+    let currentIdx = 0
+    let currentNode = this.head
+    let previousNode = null
+
+    while (currentIdx < idx){
+      previousNode = currentNode
+      currentNode = currentNode!.next
+      currentIdx++
+    }
+
+    previousNode.next = currentNode
+
+    if (idx === this.length-1){
+      node = this.tail
+    }
+
+    return node.val;
   }
 
   /** toArray (useful for tests!) */
